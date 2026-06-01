@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quarterly Service Checklist — Our Gatekeeper</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --bg: #0d0f12;
+            --surface: #13161b;
+            --surface2: #1a1e25;
+            --border: #252930;
+            --text: #e8eaf0;
+            --muted: #6b7280;
+            --accent: #00d4a0;
+            --danger: #ef4444;
+            --radius: 10px;
+            --radius-lg: 16px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 15px;
+        }
+        .app-header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(13,15,18,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1.5rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .container { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+        .visit-card, .summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .visit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+        @media (max-width: 600px) {
+            .visit-grid { grid-template-columns: 1fr; }
+        }
+        select, input {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px;
+            border-radius: var(--radius);
+            width: 100%;
+        }
+        .check-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            margin-bottom: 8px;
+        }
+        .check-item.is-done { border-color: rgba(0,212,160,0.4); background: rgba(0,212,160,0.08); }
+        .check-item.is-flagged { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.08); }
+        .check-row { display: flex; gap: 12px; align-items: flex-start; }
+        .tick-btn, .flag-btn {
+            width: 34px; height: 34px;
+            border: 1.5px solid #2e333c;
+            background: var(--surface2);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tick-btn.active { background: var(--accent); border-color: var(--accent); }
+        .flag-btn.active { background: var(--danger); border-color: var(--danger); }
+        .section-header {
+            background: var(--surface);
+            padding: 14px 16px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .section-body { display: none; }
+        .check-section.open .section-body { display: block; }
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            margin-right: 10px;
+        }
+        .btn-primary { background: var(--accent); color: #0d0f12; }
+        .btn-pdf { background: #4f46e5; color: white; }
+    </style>
+</head>
+<body>
+
+<header class="app-header">
+    <div>Our Gatekeeper</div>
+    <div style="color:var(--accent); font-weight:500;">Quarterly Service Checklist</div>
+</header>
+
+<div class="container">
+    <h1 style="margin-bottom:8px;">Boom Barrier Service Report</h1>
+    <p style="color:var(--muted); margin-bottom:24px;">Field Engineer Quarterly Maintenance</p>
+
+    <!-- Visit Details -->
+    <div class="visit-card">
+        <div class="visit-grid">
+            <div>
+                <label style="font-size:12px; color:var(--muted);">Site Name</label>
+                <select id="site-name">
+                    <option value="">Select Site</option>
+                    <option value="East Legon Estate">East Legon Estate</option>
+                    <option value="Airport Residential">Airport Residential</option>
+                    <option value="Cantonments">Cantonments</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-size:12px; color:var(--muted);">Visit Date</label>
+                <input type="date" id="visit-date">
+            </div>
+            <div>
+                <label style="font-size:12px; color:var(--muted);">Quarter</label>
+                <select id="quarter">
+                    <option value="Q1 2026">Q1 2026</option>
+                    <option value="Q2 2026">Q2 2026</option>
+                    <option value="Q3 2026">Q3 2026</option>
+                    <option value="Q4 2026">Q4 2026</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checklist Sections -->
+    <div id="checklist">
+        <!-- Mechanical -->
+        <div class="check-section" data-section="mech">
+            <div class="section-header" onclick="toggleSection(this)">
+                <strong>Mechanical Systems</strong>
+                <span style="margin-left:auto;">▼</span>
+            </div>
+            <div class="section-body">
+                <div class="check-item" data-id="m1">
+                    <div class="check-row">
+                        <div class="check-controls">
+                            <div class="tick-btn" onclick="toggleTick(this)">✓</div>
+                            <div class="flag-btn" onclick="toggleFlag(this)">⚑</div>
+                        </div>
+                        <div>Boom arm movement smooth and aligned</div>
+                    </div>
+                </div>
+                <!-- More items would go here... -->
+            </div>
+        </div>
+
+        <!-- Add more sections similarly (Electrical, Control, Safety, etc.) -->
+    </div>
+
+    <div style="margin-top:30px; text-align:center;">
+        <button class="btn btn-pdf" onclick="generatePDF()">Generate PDF Report</button>
+        <button class="btn btn-primary" onclick="resetForm()">Reset Form</button>
+    </div>
+</div>
+
+<script>
+    // Set today's date
+    document.getElementById('visit-date').valueAsDate = new Date();
+
+    function toggleSection(el) {
+        el.parentElement.classList.toggle('open');
+    }
+
+    function toggleTick(btn) {
+        btn.classList.toggle('active');
+        btn.closest('.check-item').classList.toggle('is-done');
+    }
+
+    function toggleFlag(btn) {
+        btn.classList.toggle('active');
+        btn.closest('.check-item').classList.toggle('is-flagged');
+    }
+
+    function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        doc.setFontSize(18);
+        doc.text("Our Gatekeeper - Quarterly Service Report", 20, 20);
+        
+        doc.setFontSize(12);
+        doc.text(`Site: ${document.getElementById('site-name').value || 'N/A'}`, 20, 40);
+        doc.text(`Date: ${document.getElementById('visit-date').value}`, 20, 50);
+        doc.text(`Quarter: ${document.getElementById('quarter').value}`, 20, 60);
+        
+        doc.text("✅ Checklist completed", 20, 80);
+        
+        doc.save("OG_Service_Report.pdf");
+        alert("PDF Generated Successfully!");
+    }
+
+    function resetForm() {
+        if (confirm("Reset all fields?")) {
+            location.reload();
+        }
+    }
+</script>
+
+</body>
+</html>
