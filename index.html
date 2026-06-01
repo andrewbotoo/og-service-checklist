@@ -183,68 +183,7 @@ select:focus, input:focus, textarea:focus {
 select option { background: var(--surface2); }
 textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
 
-/* TIMETABLE */
-.timetable-section {
-  margin-bottom: 1.5rem;
-}
-.collapsible-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  padding: 0.85rem 1.25rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  transition: border-color 0.15s;
-  user-select: none;
-}
-.collapsible-header.open { border-radius: var(--radius-lg) var(--radius-lg) 0 0; border-color: var(--border2); }
-.collapsible-header:hover { border-color: var(--border2); }
-.coll-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.coll-title svg { width: 16px; height: 16px; color: var(--muted); }
-.coll-arrow {
-  width: 20px;
-  height: 20px;
-  color: var(--muted);
-  transition: transform 0.2s;
-}
-.coll-arrow.open { transform: rotate(180deg); }
-.collapsible-body {
-  display: none;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-top: none;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  overflow: hidden;
-}
-.collapsible-body.open { display: block; }
-.tt-table { width: 100%; border-collapse: collapse; }
-.tt-table th {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--muted);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 10px 16px;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-}
-.tt-table td {
-  padding: 10px 16px;
-  font-size: 13px;
-  border-bottom: 1px solid var(--border);
-}
-.tt-table tr:last-child td { border-bottom: none; }
-.tt-table tr:hover td { background: var(--surface2); }
+
 .site-tag {
   display: inline-block;
   font-size: 11px;
@@ -337,8 +276,8 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
   flex-shrink: 0;
 }
 .tick-btn, .flag-btn {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 8px;
   border: 1.5px solid var(--border2);
   background: var(--surface2);
@@ -348,12 +287,9 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
   justify-content: center;
   transition: all 0.15s;
   flex-shrink: 0;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
 }
-@media(max-width:600px){
-  .tick-btn, .flag-btn { width: 40px; height: 40px; border-radius: 10px; }
-  .tick-btn svg, .flag-btn svg { width: 16px; height: 16px; }
+-webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .tick-btn:hover { border-color: var(--accent); }
 .flag-btn:hover { border-color: var(--danger); }
@@ -402,24 +338,6 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
   border-color: rgba(239,68,68,0.3);
 }
 .note-area textarea:focus { border-color: var(--danger); }
-
-/* SITE REQUIRED BANNER */
-.site-required-banner {
-  display: none;
-  background: rgba(245,158,11,0.08);
-  border: 1px solid rgba(245,158,11,0.25);
-  border-radius: var(--radius);
-  padding: 10px 14px;
-  font-size: 13px;
-  color: var(--warn);
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.02em;
-}
-.site-required-banner.show { display: block; }
-.checklist-body { transition: opacity 0.2s; }
-.checklist-body.locked { opacity: 0.35; pointer-events: none; user-select: none; }
 
 /* SUMMARY */
 .summary-card {
@@ -604,49 +522,6 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
       </div>
     </div>
 
-    <!-- TIMETABLE -->
-    <div class="timetable-section">
-      <div class="collapsible-header" id="tt-header">
-        <div class="coll-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Quarterly schedule — all 3 sites
-        </div>
-        <svg class="coll-arrow" id="tt-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-      <div class="collapsible-body" id="tt-body">
-        <table class="tt-table">
-          <thead>
-            <tr>
-              <th>Quarter</th>
-              <th>NTHC Prestige</th>
-              <th>EMEFS Hillview</th>
-              <th>Lakeside Estate</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">Q1 (Jan–Mar)</td><td><span class="site-tag tag-nthc">Wk 2 Jan</span></td><td><span class="site-tag tag-emefs">Wk 3 Jan</span></td><td><span class="site-tag tag-lake">Wk 4 Jan</span></td></tr>
-            <tr><td style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">Q2 (Apr–Jun)</td><td><span class="site-tag tag-nthc">Wk 2 Apr</span></td><td><span class="site-tag tag-emefs">Wk 3 Apr</span></td><td><span class="site-tag tag-lake">Wk 4 Apr</span></td></tr>
-            <tr><td style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">Q3 (Jul–Sep)</td><td><span class="site-tag tag-nthc">Wk 2 Jul</span></td><td><span class="site-tag tag-emefs">Wk 3 Jul</span></td><td><span class="site-tag tag-lake">Wk 4 Jul</span></td></tr>
-            <tr><td style="color:var(--muted);font-family:'DM Mono',monospace;font-size:12px">Q4 (Oct–Dec)</td><td><span class="site-tag tag-nthc">Wk 2 Oct</span></td><td><span class="site-tag tag-emefs">Wk 3 Oct</span></td><td><span class="site-tag tag-lake">Wk 4 Oct</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- SITE REQUIRED BANNER -->
-    <div class="site-required-banner show" id="site-banner">⚠ Select a site above to begin the checklist</div>
-
-    <div class="checklist-body locked" id="checklist-body">
-
-    <!-- PROGRESS -->
-    <div class="progress-section">
-      <div class="progress-meta">
-        <div class="prog-label"><strong id="prog-done">0</strong> of <strong id="prog-total">0</strong> checks complete</div>
-        <div class="flag-label" id="flag-label"></div>
-      </div>
-      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
-    </div>
-
     <!-- CHECKLIST SECTIONS -->
     <div class="check-section">
       <div class="section-header">
@@ -740,8 +615,6 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
         <div class="stat-label">Items flagged</div>
       </div>
     </div>
-
-    </div><!-- /checklist-body -->
 
     <div class="action-row">
       <button class="btn btn-secondary" onclick="resetForm()">
@@ -1146,20 +1019,7 @@ function generatePDF() {
   doc.save(filename);
 }
 
-document.getElementById('site-select').addEventListener('change', function() {
-  const hassite = this.value !== '';
-  document.getElementById('site-banner').classList.toggle('show', !hassite);
-  document.getElementById('checklist-body').classList.toggle('locked', !hassite);
-});
 
-document.getElementById('tt-header').addEventListener('click', () => {
-  const body = document.getElementById('tt-body');
-  const arrow = document.getElementById('tt-arrow');
-  const header = document.getElementById('tt-header');
-  body.classList.toggle('open');
-  arrow.classList.toggle('open');
-  header.classList.toggle('open');
-});
 
 document.getElementById('visit-date').valueAsDate = new Date();
 buildAll();
