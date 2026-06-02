@@ -921,6 +921,7 @@ function submitReport() {
       timestamp: new Date().toISOString(),
       site, date, quarter, condition,
       engineer: 'King David',
+      partsUsed: parts,
       checksTotal: keys.length,
       checksPassed: done,
       flagCount: flags,
@@ -1112,23 +1113,26 @@ function generatePDF() {
   }
 
   if (y > 240) { doc.addPage(); y = 20; }
+  const pLines = doc.splitTextToSize(parts, W - margin * 2 - 8);
+  const nLines2 = doc.splitTextToSize(notes, W - margin * 2 - 8);
+  const pHeight = Math.max(10, pLines.length * 5);
+  const nHeight = Math.max(10, nLines2.length * 5);
+  const boxHeight = 14 + pHeight + 8 + nHeight + 4;
   doc.setFillColor(245, 246, 248);
-  doc.roundedRect(margin, y, W - margin * 2, 36, 3, 3, 'F');
+  doc.roundedRect(margin, y, W - margin * 2, boxHeight, 3, 3, 'F');
   doc.setTextColor(...mid);
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.text('PARTS USED / REPLACED', margin + 4, y + 8);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 32, 36);
-  const pLines = doc.splitTextToSize(parts, W - margin * 2 - 8);
   doc.text(pLines, margin + 4, y + 14);
   doc.setTextColor(...mid);
   doc.setFont('helvetica', 'bold');
-  doc.text('ENGINEER NOTES', margin + 4, y + 25);
+  doc.text('ENGINEER NOTES', margin + 4, y + 14 + pHeight + 8);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 32, 36);
-  const nLines2 = doc.splitTextToSize(notes, W - margin * 2 - 8);
-  doc.text(nLines2, margin + 4, y + 31);
+  doc.text(nLines2, margin + 4, y + 14 + pHeight + 14);
 
   const pageCount = doc.internal.getNumberOfPages();
   for (let p = 1; p <= pageCount; p++) {
